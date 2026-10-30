@@ -24,16 +24,16 @@ export default function App() {
       <Router>
         <div className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-gold-500 selection:text-white">
           <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200 px-6 py-4 flex justify-between items-center shadow-sm">
-            <Link to="/" className="text-xl font-medium tracking-wide flex items-center gap-3 hover:text-gold-600 transition-colors">
+            <Link to="/" className="text-xl font-serif font-bold tracking-wide flex items-center gap-3 hover:text-gold-600 transition-colors">
               {settings?.logo_url && (
-                <img src={settings.logo_url} alt="Logo" className="w-10 h-10 rounded-full object-cover border border-gray-100 shadow-sm" />
+                <img src={settings.logo_url} alt="Logo" className="w-12 h-12 object-contain" />
               )}
-              {settings?.brand_name || 'CARGANDO...'}
+              {settings?.brand_name || 'L&P Moda Circular'}
             </Link>
             <div className="flex gap-6">
               <Link to="/" className="text-gray-600 hover:text-gold-600 transition flex items-center gap-2 font-medium">
                 <ShoppingBag size={20} /> 
-                <span className="text-sm">Bolsa ({cart.length})</span>
+                <span className="text-sm">Pedido ({cart.length})</span>
               </Link>
               <Link to="/admin" className="text-gray-600 hover:text-gold-600 transition flex items-center gap-2 font-medium">
                 <Lock size={20} /> 
