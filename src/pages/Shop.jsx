@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AppContext } from '../App';
 import { supabase } from '../lib/supabase';
-import { ShoppingCart, X, Plus, Search, User } from 'lucide-react';
+import { ShoppingCart, X, Plus, Search, User, ZoomIn } from 'lucide-react';
 
 export default function Shop() {
   const { settings, cart, setCart, isCartOpen, setIsCartOpen } = useContext(AppContext);
@@ -11,6 +11,7 @@ export default function Shop() {
   const [filter, setFilter] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
 
+  // Estados para el Popup de Cliente
   const [showCheckout, setShowCheckout] = useState(false);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [customerForm, setCustomerForm] = useState({ 
@@ -19,6 +20,9 @@ export default function Shop() {
     phone: '', 
     address: '' 
   });
+
+  // Estado para la imagen ampliada
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     fetchProducts();
@@ -201,14 +205,23 @@ export default function Shop() {
                 </div>
               )}
               
-              <div className="h-80 w-full relative bg-white border-b border-gray-50 p-6 flex items-center justify-center">
+              {/* Contenedor de la imagen ahora es clicable */}
+              <div 
+                className="h-80 w-full relative bg-white border-b border-gray-50 p-6 flex items-center justify-center cursor-pointer group/image"
+                onClick={() => setSelectedImage(product.image_url)}
+              >
                 <img 
                   src={product.image_url} 
                   alt={product.title} 
-                  className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-700 ease-out drop-shadow-sm" 
+                  className="max-w-full max-h-full object-contain group-hover/image:scale-105 transition-transform duration-700 ease-out drop-shadow-sm" 
                 />
                 <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-xs font-semibold px-3 py-1.5 rounded-full uppercase tracking-wider text-gray-800 shadow-sm border border-gray-100">
                   {product.condition}
+                </div>
+                
+                {/* Lupa sutil en la esquina inferior derecha */}
+                <div className="absolute bottom-3 right-3 bg-gray-900/10 backdrop-blur-md p-2 rounded-full text-gray-500 opacity-40 group-hover/image:opacity-100 group-hover/image:bg-gray-900/20 group-hover/image:text-gray-800 transition-all duration-300">
+                  <ZoomIn size={18} />
                 </div>
               </div>
               
@@ -242,6 +255,29 @@ export default function Shop() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* VISOR DE IMAGEN AMPLIADA (MODAL) */}
+      {selectedImage && (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 md:p-10">
+          <div 
+            className="absolute inset-0 bg-gray-900/90 backdrop-blur-sm transition-opacity" 
+            onClick={() => setSelectedImage(null)} 
+          />
+          
+          <button 
+            onClick={() => setSelectedImage(null)} 
+            className="absolute top-4 right-4 md:top-8 md:right-8 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-3 rounded-full transition-colors z-[80]"
+          >
+            <X size={24} />
+          </button>
+          
+          <img 
+            src={selectedImage} 
+            alt="Vista ampliada" 
+            className="relative z-10 max-w-full max-h-full object-contain rounded-lg shadow-2xl animate-in zoom-in-95 duration-200" 
+          />
         </div>
       )}
 
